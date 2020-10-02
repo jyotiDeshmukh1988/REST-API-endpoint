@@ -54,6 +54,29 @@ function wl_post( $slug ) {
 	return $data;
 }
 
+function wl_products() {
+	$args = [
+		'numberposts' => 99999,
+		'post_type' => 'products'
+	];
+
+	$posts = get_posts($args);
+
+	$data = [];
+	$i = 0;
+
+	foreach($posts as $post) {
+		$data[$i]['id'] = $post->ID;
+		$data[$i]['title'] = $post->post_title;
+        $data[$i]['slug'] = $post->post_name;
+        $data[$i]['price'] = get_field('price', $post->ID);
+        $data[$i]['delivery'] = get_field('delivery', $post->ID);
+		$i++;
+	}
+
+	return $data;
+}
+
 add_action('rest_api_init', function() {
 	register_rest_route('wl/v1', 'posts', [
 		'methods' => 'GET',
@@ -63,5 +86,10 @@ add_action('rest_api_init', function() {
 	register_rest_route( 'wl/v1', 'posts/(?P<slug>[a-zA-Z0-9-]+)', array(
 		'methods' => 'GET',
 		'callback' => 'wl_post',
-	) );
+    ) );
+    
+    register_rest_route('wl/v1', 'products', [
+		'methods' => 'GET',
+		'callback' => 'wl_products',
+	]);
 });
