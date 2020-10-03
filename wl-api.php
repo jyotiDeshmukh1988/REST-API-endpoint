@@ -54,6 +54,7 @@ function wl_post( $slug ) {
 	return $data;
 }
 
+// Used in this video https://www.youtube.com/watch?v=76sJL9fd12Y
 function wl_products() {
 	$args = [
 		'numberposts' => 99999,
@@ -88,6 +89,7 @@ add_action('rest_api_init', function() {
 		'callback' => 'wl_post',
     ) );
     
+    // Used in this video: https://www.youtube.com/watch?v=76sJL9fd12Y	
     register_rest_route('wl/v1', 'products', [
 		'methods' => 'GET',
 		'callback' => 'wl_products',
